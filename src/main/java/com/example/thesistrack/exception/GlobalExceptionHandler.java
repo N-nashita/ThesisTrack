@@ -5,6 +5,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.authentication.BadCredentialsException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,5 +21,20 @@ public class GlobalExceptionHandler {
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .reduce((a, b) -> a + ", " + b).orElse("Validation failed");
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, msg);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail handleNotFound(ResourceNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(BusinessRuleException.class)
+    public ProblemDetail handleBusiness(BusinessRuleException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail handleBadCredentials(BadCredentialsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid email or password");
     }
 }
