@@ -2,12 +2,15 @@ package com.example.thesistrack.config;
 
 import com.example.thesistrack.security.RoleBasedSuccessHandler;
 import org.springframework.context.annotation.*;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.example.thesistrack.security.JwtAuthFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,12 +24,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
-                                           RoleBasedSuccessHandler successHandler) throws Exception {
+                                            RoleBasedSuccessHandler successHandler,
+                                            JwtAuthFilter jwtAuthFilter) throws Exception {
         http
-                // Lab convenience: Postman diye /api test korar jonno. Production e token auth better.
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**", "/error").permitAll()
+                        .requestMatchers("/login", "/css/**", "/js/**", "/error", "/api/auth/**").permitAll()
                         .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/supervisor/**", "/api/supervisor/**").hasRole("SUPERVISOR")
                         .requestMatchers("/student/**", "/api/student/**").hasRole("STUDENT")
@@ -35,6 +38,8 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .successHandler(successHandler)
                         .permitAll())
+                        .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
