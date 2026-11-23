@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Admin Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments :: navAdmin}"></nav>
+<main class="container">
+    <h1>Admin Dashboard</h1>
+    <div class="grid">
+        <div class="card stat"><b th:text="${studentCount}">0</b><span>Students</span></div>
+        <div class="card stat"><b th:text="${supervisorCount}">0</b><span>Supervisors</span></div>
+        <div class="card stat"><b th:text="${theses.size()}">0</b><span>Assigned theses</span></div>
+    </div>
+    <div class="card">
+        <h3>Who is assigned to whom</h3>
+        <p class="muted" th:if="${theses.isEmpty()}">No assignment yet. Go to the Assign page.</p>
+        <table th:unless="${theses.isEmpty()}">
+            <tr><th>Student</th><th>Supervisor</th><th>Thesis</th><th>Status</th></tr>
+            <tr th:each="t : ${theses}">
+                <td th:text="${t.student.name}"></td>
+                <td th:text="${t.supervisor.name}"></td>
+                <td th:text="${t.title}"></td>
+                <td><span class="badge" th:classappend="'badge-' + ${t.status.name().toLowerCase()}" th:text="${t.status}"></span></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

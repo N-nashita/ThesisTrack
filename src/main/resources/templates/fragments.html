@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | ThesisTrack'">ThesisTrack</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:fragment="navAdmin" class="nav">
+    <span class="brand">📘 ThesisTrack</span>
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/students}">Students</a>
+    <a th:href="@{/admin/supervisors}">Supervisors</a>
+    <a th:href="@{/admin/assign}">Assign</a>
+    <a th:href="@{/admin/results}">Results</a>
+    <form th:action="@{/logout}" method="post" style="margin:0"><button class="btn light" type="submit">Logout</button></form>
+</nav>
+
+<nav th:fragment="navSupervisor" class="nav">
+    <span class="brand">📘 ThesisTrack</span>
+    <a th:href="@{/supervisor/dashboard}">My Students</a>
+    <form th:action="@{/logout}" method="post" style="margin:0"><button class="btn light" type="submit">Logout</button></form>
+</nav>
+
+<nav th:fragment="navStudent" class="nav">
+    <span class="brand">📘 ThesisTrack</span>
+    <a th:href="@{/student/dashboard}">My Thesis</a>
+    <form th:action="@{/logout}" method="post" style="margin:0"><button class="btn light" type="submit">Logout</button></form>
+</nav>
+
+<div th:fragment="flash">
+    <div class="alert ok" th:if="${success}" th:text="${success}"></div>
+    <div class="alert err" th:if="${error}" th:text="${error}"></div>
+</div>
+
+</body>
+</html>
