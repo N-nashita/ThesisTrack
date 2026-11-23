@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Assign Supervisor')}"></head>
+<body>
+<nav th:replace="~{fragments :: navAdmin}"></nav>
+<main class="container">
+    <div th:replace="~{fragments :: flash}"></div>
+    <h1>Assign Supervisor</h1>
+    <div class="card">
+        <p class="muted" th:if="${students.isEmpty()}">All students already have a supervisor.</p>
+        <form th:unless="${students.isEmpty()}" th:action="@{/admin/assign}" method="post">
+            <div class="two">
+                <div>
+                    <label>Student</label>
+                    <select name="studentId" required>
+                        <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name + ' (' + s.email + ')'}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Supervisor</label>
+                    <select name="supervisorId" required>
+                        <option th:each="s : ${supervisors}" th:value="${s.userId()}" th:disabled="${s.full()}"
+                                th:text="${s.name() + ' | ' + s.researchInterest() + ' | ' + s.assigned() + '/' + s.maxStudents()}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="two">
+                <div><label>Thesis title</label><input name="title"></div>
+                <div><label>Research area</label><input name="researchArea"></div>
+            </div>
+            <button class="btn" type="submit">Assign</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3>Current assignments</h3>
+        <table>
+            <tr><th>Student</th><th>Supervisor</th><th>Thesis</th><th>Area</th></tr>
+            <tr th:each="t : ${theses}">
+                <td th:text="${t.student.name}"></td><td th:text="${t.supervisor.name}"></td>
+                <td th:text="${t.title}"></td><td th:text="${t.researchArea}"></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

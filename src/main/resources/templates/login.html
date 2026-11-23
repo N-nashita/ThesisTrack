@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>ThesisTrack Login</title></head>
+<head th:replace="~{fragments :: head('Login')}"></head>
 <body>
-<h2>ThesisTrack Login</h2>
-<p th:if="${param.error}" style="color:red">Invalid email or password</p>
-<p th:if="${param.logout}" style="color:green">You have been logged out</p>
-<form th:action="@{/login}" method="post">
-    <input type="email" name="username" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Password" required><br>
-    <button type="submit">Login</button>
-</form>
+<div class="login-box card">
+    <h1 style="text-align:center">📘 ThesisTrack</h1>
+    <p class="muted" style="text-align:center">Thesis Progress Tracking System</p>
+    <div class="alert err" th:if="${param.error}">Invalid email or password</div>
+    <div class="alert ok" th:if="${param.logout}">You have been logged out</div>
+    <form th:action="@{/login}" method="post">
+        <label>Email</label>
+        <input type="email" name="username" required>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <button class="btn" type="submit" style="width:100%">Login</button>
+    </form>
+</div>
 </body>
 </html>

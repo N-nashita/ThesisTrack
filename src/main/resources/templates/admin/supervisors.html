@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Supervisors')}"></head>
+<body>
+<nav th:replace="~{fragments :: navAdmin}"></nav>
+<main class="container">
+    <div th:replace="~{fragments :: flash}"></div>
+    <h1>Supervisors</h1>
+    <div class="card">
+        <h3>Create supervisor account</h3>
+        <form th:action="@{/admin/supervisors}" method="post">
+            <div class="two">
+                <div><label>Name</label><input name="name" required></div>
+                <div><label>Email</label><input type="email" name="email" required></div>
+            </div>
+            <div class="two">
+                <div><label>Password (min 6 characters)</label><input type="password" name="password" minlength="6" required></div>
+                <div><label>Max students (1 to 3)</label><input type="number" name="maxStudents" min="1" max="3" value="3" required></div>
+            </div>
+            <label>Research interest</label>
+            <input name="researchInterest" required>
+            <button class="btn" type="submit">Create supervisor</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3>All supervisors</h3>
+        <table>
+            <tr><th>Name</th><th>Email</th><th>Research interest</th><th>Assigned / Capacity</th></tr>
+            <tr th:each="s : ${supervisors}">
+                <td th:text="${s.name()}"></td>
+                <td th:text="${s.email()}"></td>
+                <td th:text="${s.researchInterest()}"></td>
+                <td><span class="badge" th:text="${s.assigned()} + ' / ' + ${s.maxStudents()}"></span></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

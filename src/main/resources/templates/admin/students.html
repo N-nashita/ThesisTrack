@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Students')}"></head>
+<body>
+<nav th:replace="~{fragments :: navAdmin}"></nav>
+<main class="container">
+    <div th:replace="~{fragments :: flash}"></div>
+    <h1>Students</h1>
+    <div class="card">
+        <h3>Create student account</h3>
+        <form th:action="@{/admin/students}" method="post">
+            <div class="two">
+                <div><label>Name</label><input name="name" required></div>
+                <div><label>Email</label><input type="email" name="email" required></div>
+            </div>
+            <label>Password (min 6 characters)</label>
+            <input type="password" name="password" minlength="6" required>
+            <button class="btn" type="submit">Create student</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3>All students</h3>
+        <table>
+            <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+            <tr th:each="s : ${students}">
+                <td th:text="${s.id()}"></td><td th:text="${s.name()}"></td><td th:text="${s.email()}"></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>
